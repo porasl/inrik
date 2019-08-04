@@ -1,0 +1,261 @@
+
+.brown8      { font-family: sans-serif, Times New Roman; font-size: 8pt; font-style: normal; color: brown }
+A.brown8       { font-family: sans-serif, Times New Roman; font-size: 8pt; font-style: normal; color: brown; text-decoration: none }
+A.brown8:hover { font-family: sans-serif, Times New Roman; font-size: 8pt; font-style: normal; color: red; text-decoration: underline }
+
+.brown9      { font-family: sans-serif, Times New Roman; font-size: 9pt; font-style: normal; color: brown }
+A.brown9       { font-family: sans-serif, Times New Roman; font-size: 9pt; font-style: normal; color: brown; text-decoration: none }
+A.brown9:hover { font-family: sans-serif, Times New Roman; font-size: 9pt; font-style: normal; color: red; text-decoration: underline }
+
+.brown10      { font-family: sans-serif, Times New Roman; font-size: 10pt; font-style: normal; color: brown }
+A.brown10       { font-family: sans-serif, Times New Roman; font-size: 10pt; font-style: normal; color: brown; text-decoration: none }
+A.brown10:hover { font-family: sans-serif, Times New Roman; font-size: 10pt; font-style: normal; color: red; text-decoration: underline }
+
+.brown14     { font-family: sans-serif, Times New Roman; font-size: 14pt; font-style: normal; color: brown }
+A.brown14       { font-family: sans-serif, Times New Roman; font-size: 14pt; font-style: normal; color: brown; text-decoration: none }
+A.brown14:hover { font-family: sans-serif, Times New Roman; font-size: 14pt; font-style: normal; color: red; text-decoration: underline }
+
+.brown12      { font-family: sans-serif, Times New Roman; font-size: 12pt; font-style: normal; color: brown }
+A.brown12       { font-family: sans-serif, Times New Roman; font-size: 12pt; font-style: normal; color: brown; text-decoration: none }
+A.brown12:hover { font-family: sans-serif, Times New Roman; font-size: 12pt; font-style: normal; color: red; text-decoration: underline }
+
+.black14      { font-family: sans-serif, Times New Roman; font-size: 12pt; font-style: normal; color: black }
+
+
+.iframe { 
+	border:0px;
+	ALLOWTRANSPARENCY="true";
+	overflow-x: hidden; 
+	overflow-y: hidden;  
+	}
+
+.saveButton{
+    background:url(../images/save1.png) no-repeat;
+    cursor:pointer;
+    border:2px;
+    width:100px;
+    height:100px;
+}
+
+.saveButton:active {
+     background:url(../images/save1.png) no-repeat;
+}
+
+.innercontent{display: none;}
+
+
+.divTable{
+  display: table;         
+  width: 700px;
+  height:50px;
+  text-align: center;         
+  background-color: #ffffff;         
+  border: 0px solid #0080FF;    
+  vertical-align: text-top;
+  border-spacing: 5px; /* cellspacing:poor IE support for  this */
+}
+
+.subTable{  
+  display: table;
+  width: 200px;
+  text-align: center;         
+  background-color: #0080FF;         
+  border: 0px solid #0080FF;  
+  width:200px; 
+  border-spacing: 5px; /* cellspacing:poor IE support for  this */
+}
+
+.divNextPrevRow{
+  display: table-row;
+  width: auto;
+  clear: both;
+}
+
+.divRow{
+  display: table-row;
+  width: auto;
+  clear: both;
+}
+
+.divNextPrevCell{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  # width: 150px;
+  font-size: 1em;        
+  background-color: #ffffff;  
+}
+
+.divCellempty{
+	width: 150px;
+	text-align: center; 
+	vertical-align: text-top;
+}
+
+.loginCell{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 400px;
+  font-size: 0.8em;     
+  background-color: #ffffff;  
+}
+
+
+loginButton{
+  float: center; /* fix for  buggy browsers */
+  text-align: center; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 150px;
+  font-size: 0.9em;     
+  background-color: #ffffff;  
+}
+
+.signUpCell{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 250px;
+  font-size: 0.8em;     
+  background-color: #ffffff;  
+}
+
+.regCell1{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 150px;
+  font-size: 0.8em;     
+  background-color: #ffffff;  
+}
+
+.message{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #c57f11; 
+  font-size: 1em;  
+   width: 400px;
+  font-size: 0.8em;     
+  background-color: #ffffff;   
+}
+
+.footer{
+  float: center; /* fix for  buggy browsers */
+  text-align: center; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 800px;
+  font-size: 0.8em;     
+  background-color: #ffffff;   
+}
+
+.descriptiontsHeader{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #ffffff; 
+  font-size: 1em;  
+   width: 450px;
+  font-size: 0.8em;     
+  background-color: #0080FF; 
+}
+
+.descriptionts{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  font-size: 1em;  
+   width: 450px;
+  font-size: 0.8em;     
+  background-color: #ffffff;  
+}
+
+.divCell{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #ffffff; 
+  font-size: 2em;  
+   width: 150px;
+  font-size: 0.9em; 
+  cursor: hand !important;      
+  background-color: #0080FF;  
+}
+
+.divCellSub{
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: center; 
+  color: #0080FF;  
+   width: 80px;
+  cursor: hand !important;
+  border: 1px solid #ffffff; 
+  font-size: 1em;        
+  background-color: white;  
+}
+
+.divCellIconIn {
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: white; 
+  font-size: 4em;     
+  width: 70px;      
+  border-style: solid;
+  border-color: #0080FF #0080FF;  
+  background-color: #0080FF;
+}
+
+.divCellIconRik {
+  float: left; /* fix for  buggy browsers */
+  display: table-column;  
+  text-align: left; 
+  color: #0080FF; 
+  font-size: 4em;     
+  width: 110px;      
+  border-style: solid;
+  border-color: #0080FF #0080FF #0080FF #ffffff;  
+  background-color: #ffffff;
+}
+
+.divCellIcon {
+  float: left; /* fix for  buggy browsers */
+  display: table-column;     
+  width: 200px;      
+  border-style: solid;
+  border-color: #ffffff; 
+}
+
+#droparea{
+	height: 219px; 
+	width: 600px;
+	display:none";
+	background-color: #dddddd;
+	
+}
+
+.colapsableTemplatediv{
+	background-color: #0080FF;
+	width: 800px;
+	text-align: left; 
+  	color: #ffffff; 
+  	font-size: 1em; 
+}
+
+.modalHeaderbackground{
+	 background-color: #0080FF;
+}
+
+
+
+

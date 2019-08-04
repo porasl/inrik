@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+   
+     <changeSet id="ItemInfo" author="porasl">
+        <createTable tableName="ItemInfo">
+            <column name="itemInfoId" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="userId" type="bigint(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="varchar(10)"/>
+            <column name="locale" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+             <column name="type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="varchar(10)">
+                <constraints nullable="true"/>
+            </column>
+             <column name="description" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="label" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="format" type="varchar(50)">
+            	<constraints nullable="false"/>
+            </column>
+            <column name="price" type="varchar(50)">
+            	<constraints nullable="true"/>
+            </column>
+            <column name="currencySymbol" type="varchar(1)">
+                <constraints nullable="true"/>
+            </column>
+             <column name="audioPath" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column> 
+            <column name="videoPath" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column> 
+            <column name="imagePath" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column> 
+             <column name="imageMainName" type="varchar(100)">
+                <constraints nullable="true"/>
+             </column>
+             <column name="videoMainName" type="varchar(100)">
+                <constraints nullable="true"/>
+             </column>
+             <column name="audioMainName" type="varchar(100)">
+                <constraints nullable="true"/>
+             </column>
+              <column name="selectedTemplate" type="varchar(100)">
+                <constraints nullable="false"/>
+             </column>
+            <column name="expirationDate" type="timestamp">
+            <constraints nullable="true"/>
+            </column>
+            <column name="creationDate" type="timestamp">
+            <constraints nullable="true"/>
+            </column>
+            <column name="modificationDate" type="timestamp">
+            <constraints nullable="true"/>
+            </column>
+            <column name="deletionDate" type="timestamp">
+            <constraints nullable="true"/>
+            </column>
+            <column name="paid" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="paidAmount" type="number">
+                <constraints nullable="true"/>
+            </column>
+            <column name="notified" type="boolean">
+              <constraints nullable="true"/>
+            </column>
+             <column name="accessType" type="boolean">
+              <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="char(20)"/>
+            <column name="deleteCode" type="int">
+                <constraints nullable="false"/>
+            </column> 
+        </createTable>
+    </changeSet>
+    
+     <changeSet id="Item_Pktb" author="porasl">
+        <createTable tableName="Item_Pktb">
+            <column name="itemKey" type="varchar(255)"/>
+            <column name="next_val" type="bigint(20)"/>
+       </createTable>
+     </changeSet>
+    
+</databaseChangeLog>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-2.0.xsd 
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.0.xsd 
+http://www.springframework.org/schema/util 
+http://www.springframework.org/schema/util/spring-util-2.0.xsd" 
+xmlns:util="http://www.springframework.org/schema/util" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://www.springframework.org/schema/beans">
+	<bean id="publishPropertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:/com/inrik/config/hibernate.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<bean id="publisherDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/publish</value>
+		</property>
+		<property name="username">
+			<value>publish</value>
+		</property>
+		<property name="password">
+			<value>passw0rd</value>
+		</property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="publisherSessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="publisherHibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="publisherSessionFactory" />
+	</bean>
+
+	<bean id="publisherSessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>hibernate.cfg.xml</value>
+		</property> 
+
+		<property name="annotatedPackages">
+			<list>
+				<value>com.inrik.domain</value>
+				<value>com.inrik.service</value>
+				<value>com.inrik.dao</value>
+				<value>com.inrik.dao.hibernate</value>
+				<value>com.inrik.resource</value>
+				<value>com.inrik.email</value>
+				<value>com.inrik.helper</value>
+				<value>com.inrik.test</value>
+				<value>com.inrik.utils</value>
+				<value>com.inrik.auth.model.User</value>
+				<value>com.inrik.auth.model.Role</value>
+			</list>
+		</property>
+
+		<property name="dataSource">
+			<ref bean="publisherDataSource" />
+		</property>
+
+		<property name="annotatedClasses">
+			<list>
+				<value>com.inrik.domain.ItemInfo</value>
+				<value>com.inrik.auth.model.User</value>
+				<value>com.inrik.auth.model.Role</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="publisherParentDao" abstract="true">
+		<property name="sessionFactory">
+			<ref bean="publisherSessionFactory" />
+		</property>
+	</bean>
+
+<bean
+class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+
+	<bean
+		class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="itemDao" parent="publisherParentDao"
+		class="com.inrik.dao.hibernate.ItemInfoDaoHibernateImpl" />
+
+	<bean id="itemService" class="com.inrik.service.ItemServiceImpl">
+		<property name="itemDao" ref="itemDao" />
+	</bean>
+	
+	<bean id="userDao" parent="publisherParentDao"
+		class="com.inrik.dao.hibernate.UserDaoHibernateImpl" />
+
+	<bean id="userService" class="com.inrik.service.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
+	
+	<bean
+		class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+
+ 	<bean
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"
+         id="PersistenceExceptionTranslator" />
+
+	
+	<aop:aspectj-autoproxy />
+
+	<aop:config>
+		<!-- Transaction Management -->
+		<aop:advisor order="1" advice-ref="publish-txAdvice"
+			pointcut="execution(public * com.inrik.service.*ServiceImpl.*(..))" />
+	</aop:config>
+
+	<!-- Transaction advice definition, based on method name patterns. Defaults 
+		to PROPAGATION_REQUIRED for all methods whose name starts with "insert" or 
+		"update", and to PROPAGATION_REQUIRED with read-only hint for all other methods. -->
+	<tx:advice id="publish-txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="find*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+</beans>

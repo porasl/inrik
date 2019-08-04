@@ -1,0 +1,9 @@
+package com.inrik.auth.repository;
+
+
+import com.inrik.auth.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
+}

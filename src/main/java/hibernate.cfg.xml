@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/publish</property>
+    <property name="connection.username">publish</property>
+    <property name="connection.password">passw0rd</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="connection.pool_size">2</property>
+    <property name="default_schema">publish</property>
+    <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+   <!--  <property name="current_session_context_class">thread</property> -->
+    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  
+    <!-- this will show us all sql statements -->
+    <property name="hibernate.show_sql">true</property>
+    <!-- this will create the database tables for us 
+      <property name="hibernate.hbm2ddl.auto">create</property> -->
+      
+    <mapping class="com.inrik.domain.ItemInfo" />
+    <mapping class="com.inrik.auth.model.User" />
+    <mapping class="com.inrik.auth.model.Role" />
+  </session-factory>
+
+</hibernate-configuration>

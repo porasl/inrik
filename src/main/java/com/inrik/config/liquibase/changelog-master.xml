@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<property name="varcharType" value="NVARCHAR" dbms="mssql" />
+	<property name="varcharType" value="VARCHAR2" dbms="oracle" />
+	<property name="varcharType" value="VARCHAR" dbms="postgresql" />
+
+	<property name="varcharSemantics" value="" dbms="mssql" />
+	<property name="varcharSemantics" value=" CHAR" dbms="oracle" />
+	<property name="varcharSemantics" value="" dbms="postgresql" />
+
+	<property name="booleanType" value="NUMERIC(1,0)" dbms="mssql" />
+	<property name="booleanType" value="NUMERIC(1,0)" dbms="oracle" />
+	<property name="booleanType" value="BOOL" dbms="postgresql" />
+	
+	<include file="base-tables.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>
