@@ -1,4 +1,4 @@
-// @copyRight 2019 Porasl
+// @copyRight 2019  Porasl
 
 package com.inrik.auth;
 
