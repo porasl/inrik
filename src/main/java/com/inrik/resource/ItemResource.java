@@ -44,17 +44,20 @@ public class ItemResource extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
 
 	// This can be used to test the integration with the browser
-    @GetMapping("/item/{id}")
-    @ResponseBody
-	public Response getHTML(@PathVariable String id) {
-		logger.info(" Get item id {0} ", id);
-		//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		//itemService = (ItemService) context.getBean("itemService");
+    @Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		//logger.info(" Get item id {0} ", re);
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		itemService = (ItemService) context.getBean("itemService");
+		String id = request.getParameter("id");
 		ItemInfo item = itemService.getItem("${pageContext.request.userPrincipal.name}", id);
 		ItemInfo[] ItemInfos = new ItemInfo[1];
 		ItemInfos[0] = item;
-		return Response.status(200).entity(Converter.itemToString(ItemInfos).toJSONString()).header("Access-Control-Allow-Origin", "*")
-		.header("Access-Control-Allow-Methods", "*").build();
+		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
+	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "*");
 	}
 	
     @Override

@@ -385,7 +385,6 @@ function upload(file) {
     if($('#tmpSubFolderName').val() !=""){
     	formData.append("tmpSubFolderName",$('#tmpSubFolderName').val());
     }
-
     var xhr = new XMLHttpRequest();
     xhr.withCredentials=false;
     xhr.upload.addEventListener("progress", uploadProgress, false);
@@ -418,53 +417,6 @@ function uploadComplete(event) {
         title : "Test Image"
     }));
 }
-
-
-function upload(file) {
-	  //  document.getElementById("status").innerHTML = "Uploading " + file.name;
-	    var formData = new FormData();
-	    formData.append("_csrf","${_csrf.token}");
-	    formData.append("file", file);
-	    if($('#tmpSubFolderName').val() !=""){
-	    	formData.append("tmpSubFolderName",$('#tmpSubFolderName').val());
-	    }
-
-	    var xhr = new XMLHttpRequest();
-	    xhr.withCredentials=false;
-	    xhr.upload.addEventListener("progress", uploadProgress, false);
-	    xhr.addEventListener("load", uploadComplete, true);
-	    xhr.open("POST", "uploadServlet", true); // If async=false, then you'll miss progress bar support.
-	    xhr.send(formData);
-	}
-
-	function uploadProgress(event) {
-	    // Note: doesn't work with async=false.
-	    var progress = Math.round(event.loaded / event.total * 100);
-	   // document.getElementById("status").innerHTML = "Progress " + progress + "%";
-	    document.getElementById("savePanel").style.display='block';
-	    document.getElementById("dropImageProcess").innerHTML="<font class='blue12'>Drag & Drop images</font>";
-	}
-
-	function uploadComplete(event) {
-		text = document.getElementById("imagedropbox").innerHTML;
-		if(text =="Drop images here..."){
-			document.getElementById("imagedropbox").innerHTML ="";
-		}
-		
-		responseText = event.target.responseText.split("\/");
-		$('#tmpSubFolderName').val(responseText[0]);
-	    $('#imagedropbox').append($('<img>', { 
-	        src : tempImageFolder+event.target.responseText, 
-	        width : 100, 
-	        //height : 100, 
-	        alt : "Test Image", 
-	        title : "Test Image"
-	    }));
-	}
-
-
-
-
 	
 function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 		var albumUrl ="album.jsp?itemInfoId="+itemInfoId +"?${_csrf.parameterName}=${_csrf.token}";
@@ -474,13 +426,12 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 	    "<img src='resources/images/whats.png' width='30'> &nbsp; "+
 	    "<img src='resources/images/insta.png' width='30'> &nbsp; "+
 	    "<img src='resources/images/mail.png' width='30'></div>";
-	 
+	   debugger;
 	    onclieckShowAlbumStr = "onclick= showAlbumInModule('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 	    onclieckEditAlbumStr = "onclick= editAlbum('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 	    onclieckShareAlbumStr = "onclick= shareAlbum('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 		onclieckDeleteAlbumStr = "onclick= deleteAlbum('"+itemInfoId +"');";
-		
-		
+	
 		deleteItem = "<td "+ onclieckDeleteAlbumStr +"><img src='resources/images/delete.png' class='myAlbum'  title='Delete Album' /> </td>";
 		editItem = "<td "+ onclieckEditAlbumStr +" ><img src='resources/images/edit.png' class='myAlbum'  title='Edit Album'></td>";
 		shareItem = "<td "+ onclieckShareAlbumStr +"><img src='resources/images/share2.png' class='myAlbum'  title='Share Album' > </td>";
@@ -494,12 +445,12 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 }  
 
 
-function saveAlbum(){
+  function saveAlbum(){
 	tmpFolder = $('#tmpSubFolderName').val();
 	username = "${pageContext.request.userPrincipal.name}";
 	details = $('#details').val();
 	albumname= $('#albumName').val();
-	publicAlbum= $('#public').is(':checked');
+	publicAlbum= $('#public').is(':checked');debugger;
 	var request =	$.ajax({
 		  type: "POST",
 		  headers: { 
@@ -523,45 +474,37 @@ function saveAlbum(){
 	   });	
 	}
 	
-
-
-function showMyAlbums(){ debugger;
-	var request =	$.ajax({
+  function showMyAlbums(){
+	$.ajax({
 		  type: "GET",
-		  contentType : "application/json",
-	      dataType: "json",
 		  headers: { 
 		        'Accept': 'application/json',
 		        'Content-Type': 'application/json' 
 		    },
 		  url: serverUrl + "${contextPath}/items?${_csrf.parameterName}=${_csrf.token}",
-		 
-		  success: function(data) {debugger;
-		     if(data != null){
-			   for(i=0; data.length > i;i++){
-			       	item = data.responseJSON[i];
-			   		name = item.name;
-			   		itemInfoId = item.itemInfoId;
-			   		description = item.description;
-			   		imagePath=item.imagePath;
-			   		selectedTemplate = item.selectedTemplate;
-			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);
-			    }
-		     }else{
-			      console.log("no data .....")
-			    }
-		   },
-
-	       error : function(e) {debugger;
-	       // alert(e);
-	       }
 		  
-	   });	
-	}
-	
+		  success: function(data) {debugger;
+		     if(data !== undefined){
+			   for(i=0; data.length > i;i++){
+			   		name = data[i].name;
+			   		itemInfoId = data[i].itemInfoId;
+			   		description = data[i].description;
+			   		imagePath=data[i].imagePath;
+			   		selectedTemplate = data[i].selectedTemplate;
+			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);	
+			    }
+		   }
+		  },
+		  error: function(xhr, status, error){debugger;
+		         var errorMessage = xhr.status + ': ' + xhr.statusText
+		         alert('Error - ' + errorMessage);
+		     }
+	    })
+	   }
+
 	
 	function showAlbumInModule(itemInfoId,imagePath,selectedTemplate){
-		var albumUrl = serverUrl + "${contextPath}/item/"+itemInfoId+"?${_csrf.parameterName}=${_csrf.token}";
+		var albumUrl = serverUrl + "${contextPath}/item?id="+itemInfoId+"&${_csrf.parameterName}=${_csrf.token}";
 		$.ajax({
 			  type: "GET",
 			  headers: { 
@@ -570,21 +513,26 @@ function showMyAlbums(){ debugger;
 			    },
 			  url: albumUrl,
 			 
-			 success: function(data) {
-				   for(i=0; i > data.responseJSON.length ;i++){
-				       	item = data.responseJSON[i];
-				   		name = item.name;
-				   		deleted = item.deleted;
-				   		expirationDate=item.expirationDate;
-				   		notified= item.notified;
-				   		itemInfoId = item.itemInfoId;     
-				   		description = item.description;
-				   		imagePath=item.imagePath;
-				   		selectedTemplate = item.selectedTemplate;
-				    }
+			 success: function(data) {debugger;
+				 var  name = data[0].name;
+				  var deleted = data[0].deleted;
+				  var expirationDate = data[0].expirationDate;
+				  var notified = data[0].notified;
+				  var itemInfoId = data[0].itemInfoId;     
+				  var description = data[0].description;
+				  var imagePath = data[0].imagePath;
+				  var selectedTemplate = data[0].selectedTemplate;
 			   },
-			  dataType: "json"
+			  error: function(xhr, status, error){debugger;
+		         var errorMessage = xhr.status + ': ' + xhr.statusText
+		         alert('Error - ' + errorMessage);
+		     }
 		   });	
+		   alert("name: "+ name + " itemInfoId: "+ itemInfoId +
+				   "description: " + description 
+				   +" selectedTemplate: "+ selectedTemplate 
+				   + "imagePath: "+imagePath);
+		   
 		   $('#modal_body').text("Name: " +name+ "\n itemInfoId: " +
 				   itemInfoId + "\n description: " +description + "\n imagePath: "+ imagePath +
 				   "\n selectedTemplate: "+ selectedTemplate);
@@ -601,7 +549,6 @@ function showMyAlbums(){ debugger;
 		infoArea = document.getElementById(itemInfoId);
 		$(infoArea).slideToggle('slow');
 		//$(infoArea).display.style='block';
-		
 		return false;
 	}
 	
@@ -620,12 +567,10 @@ function showMyAlbums(){ debugger;
 	
 	$( document ).ready(function() {debugger;
 	 showMyAlbums();
+	 
 	});
 	
 
-</script>
-  
-  
-  
+</script> 
 </body>
 </html>
