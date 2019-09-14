@@ -514,28 +514,27 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 			  url: albumUrl,
 			 
 			 success: function(data) {debugger;
-				 var  name = data[0].name;
+				/* var  name = data[0].name;
 				  var deleted = data[0].deleted;
 				  var expirationDate = data[0].expirationDate;
 				  var notified = data[0].notified;
 				  var itemInfoId = data[0].itemInfoId;     
 				  var description = data[0].description;
 				  var imagePath = data[0].imagePath;
-				  var selectedTemplate = data[0].selectedTemplate;
+				  var selectedTemplate = data[0].selectedTemplate; */
+				  
+			 alert("name: "+ data[0].name + " itemInfoId: "+ data[0].itemInfoId +
+					   "description: " + data[0].description 
+					   +" selectedTemplate: "+  data[0].selectedTemplate 
+					   + "imagePath: "+data[0].imagePath);
+				  
 			   },
 			  error: function(xhr, status, error){debugger;
 		         var errorMessage = xhr.status + ': ' + xhr.statusText
 		         alert('Error - ' + errorMessage);
 		     }
 		   });	
-		   alert("name: "+ name + " itemInfoId: "+ itemInfoId +
-				   "description: " + description 
-				   +" selectedTemplate: "+ selectedTemplate 
-				   + "imagePath: "+imagePath);
-		   
-		   $('#modal_body').text("Name: " +name+ "\n itemInfoId: " +
-				   itemInfoId + "\n description: " +description + "\n imagePath: "+ imagePath +
-				   "\n selectedTemplate: "+ selectedTemplate);
+		  
 		return false;
 	}
 	
