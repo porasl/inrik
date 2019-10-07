@@ -264,8 +264,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
  <table width='800px'>
  <td valign='top' width='300px'>
-      <font class='blue12' >My Photo Albums  </font>
-      <div id="myAlbumLinks"></div>
+      <font class='blue12' ><b>My Photo Albums </b> <br><br>
+      <div id="numberOfMyPhotoAlbums"> Photo Albums </div></font>
+     
     </td>
      <td valign='top'>
       <font class='blue12' >My Videos Albums  </font>
@@ -274,6 +275,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
       <font class='blue12' >My File Archive  </font>
     </td>
  </table>
+ 
+  <div id="myAlbumLinks"></div>
 </div></td></table>
 
   
@@ -418,7 +421,7 @@ function uploadComplete(event) {
     }));
 }
 	
-function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
+function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		var albumUrl ="album.jsp?itemInfoId="+itemInfoId +"?${_csrf.parameterName}=${_csrf.token}";
 	    album ="<div style='display:none' id='"+itemInfoId  +"' class='content-one'>"+
 	    "<img src='resources/images/fb.png' width='30'> &nbsp;" +
@@ -426,22 +429,25 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 	    "<img src='resources/images/whats.png' width='30'> &nbsp; "+
 	    "<img src='resources/images/insta.png' width='30'> &nbsp; "+
 	    "<img src='resources/images/mail.png' width='30'></div>";
-	   debugger;
+	   
 	    onclieckShowAlbumStr = "onclick= showAlbumInModule('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 	    onclieckEditAlbumStr = "onclick= editAlbum('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 	    onclieckShareAlbumStr = "onclick= shareAlbum('"+itemInfoId +"','"+ imagePath+"','"+ selectedTemplate +"');";
 		onclieckDeleteAlbumStr = "onclick= deleteAlbum('"+itemInfoId +"');";
 	
-		deleteItem = "<td "+ onclieckDeleteAlbumStr +"><img src='resources/images/delete.png' class='myAlbum'  title='Delete Album' /> </td>";
+		deleteItem = "<table><td "+ onclieckDeleteAlbumStr +"><img src='resources/images/delete.png' class='myAlbum'  title='Delete Album' /> </td>";
 		editItem = "<td "+ onclieckEditAlbumStr +" ><img src='resources/images/edit.png' class='myAlbum'  title='Edit Album'></td>";
-		shareItem = "<td "+ onclieckShareAlbumStr +"><img src='resources/images/share2.png' class='myAlbum'  title='Share Album' > </td>";
-		showItem = "<td "+ onclieckShowAlbumStr +"><img src='resources/images/show.png' width='30' data-toggle='modal' data-target='#albumModal'  title='Show Album' > </td>";
-	  
+		shareItem = "<td "+ onclieckShareAlbumStr +"><img src='resources/images/share2.png' class='myAlbum'  title='Share Album' > </td></table>";
+		showItem = "<td colspan='3'  align='center'"+ onclieckShowAlbumStr +
+		"><img src='resources/images/show.png' width='120' data-toggle='modal' data-target='#albumModal'  title='Show Album' > </td><tr>";
+	    nameItem = "<td align='center'> <font class='blue12'>"+ decodeURI(name) +"</font></td><tr>";
+	    
 		hideImageDropBox();
 		document.getElementById("uploadImageProgress").style.display='none';
 		document.getElementById("savePanel").style.display='none';
-		$("#myAlbumLinks").append ("<table>"+ deleteItem + editItem + shareItem + showItem +"<td > <font class='blue12'>"+ decodeURI(name) 
-				+"</font></td></table><table><td>"+  album     +"</td></table>");
+		$("#myAlbumLinks").append ("<td align='center'><table align='center' width='200px'>"+ nameItem+showItem + 
+				deleteItem + editItem + shareItem +
+				"<table><td>"+  album     +"</td></table></td>");
 }  
 
 
@@ -450,7 +456,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 	username = "${pageContext.request.userPrincipal.name}";
 	details = $('#details').val();
 	albumname= $('#albumName').val();
-	publicAlbum= $('#public').is(':checked');debugger;
+	publicAlbum= $('#public').is(':checked');
 	var request =	$.ajax({
 		  type: "POST",
 		  headers: { 
@@ -468,7 +474,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 			  description = data[0].description;
 			  imagePath=data[0].imagePath;
 			  selectedTemplate = data[0].selectedTemplate;
-			   createAlbumRow(itemInfoId, imagePath, selectedTemplate);
+			   createAlbum(itemInfoId, imagePath, selectedTemplate);
 		   },
 		  dataType: "json"
 	   });	
@@ -483,19 +489,29 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 		    },
 		  url: serverUrl + "${contextPath}/items?${_csrf.parameterName}=${_csrf.token}",
 		  
-		  success: function(data) {debugger;
+		  success: function(data) {
 		     if(data !== undefined){
-			   for(i=0; data.length > i;i++){
+		    	 document.getElementById("numberOfMyPhotoAlbums").innerHTML=data.length + " Photo Albums";
+		    	 $("#myAlbumLinks").append("<table align='center' width=700px>");
+		    	 for(i=0; data.length > i;i++){
 			   		name = data[i].name;
 			   		itemInfoId = data[i].itemInfoId;
 			   		description = data[i].description;
 			   		imagePath=data[i].imagePath;
 			   		selectedTemplate = data[i].selectedTemplate;
-			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);	
+			   		$("#myAlbumLinks").append("<td  style='align:center'>");
+			   				
+			   		if(i % 4 == 0){
+			   			$("#myAlbumLinks").append("<tr>");
+			   		}
+			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);
+			   		
+			   			$("#myAlbumLinks").append("</td>");
+			   		
 			    }
 		   }
 		  },
-		  error: function(xhr, status, error){debugger;
+		  error: function(xhr, status, error){
 		         var errorMessage = xhr.status + ': ' + xhr.statusText
 		         alert('Error - ' + errorMessage);
 		     }
@@ -513,7 +529,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 			    },
 			  url: albumUrl,
 			 
-			 success: function(data) {debugger;
+			 success: function(data) {
 				/* var  name = data[0].name;
 				  var deleted = data[0].deleted;
 				  var expirationDate = data[0].expirationDate;
@@ -529,7 +545,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 					   + "imagePath: "+data[0].imagePath);
 				  
 			   },
-			  error: function(xhr, status, error){debugger;
+			  error: function(xhr, status, error){
 		         var errorMessage = xhr.status + ': ' + xhr.statusText
 		         alert('Error - ' + errorMessage);
 		     }
@@ -538,13 +554,13 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 		return false;
 	}
 	
-	function editAlbum(itemInfoId,imagePath,selectedTemplate){debugger;
+	function editAlbum(itemInfoId,imagePath,selectedTemplate){
 		infoArea = document.getElementById(itemInfoId);
 		$(infoArea).slideToggle('slow');
 		return false;
 	}
 
-	function shareAlbum(itemInfoId,imagePath,selectedTemplate){debugger;
+	function shareAlbum(itemInfoId,imagePath,selectedTemplate){
 		infoArea = document.getElementById(itemInfoId);
 		$(infoArea).slideToggle('slow');
 		//$(infoArea).display.style='block';
@@ -560,11 +576,11 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){debugger;
 		location.reload();
 	}
 	
-	function getAlbumByTempletOne(imageArray){debugger;
+	function getAlbumByTempletOne(imageArray){
 		$('#modal_body').text("5");
 	}
 	
-	$( document ).ready(function() {debugger;
+	$( document ).ready(function() {
 	 showMyAlbums();
 	 
 	});
