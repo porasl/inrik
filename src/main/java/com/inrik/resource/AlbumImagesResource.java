@@ -26,7 +26,7 @@ import com.inrik.utils.State;
 
 
 @MultipartConfig
-@WebServlet("/item")
+@WebServlet("/item_")
 public class AlbumImagesResource extends HttpServlet {
 	
 	private static final double VERSION = 1.0;
@@ -52,9 +52,9 @@ public class AlbumImagesResource extends HttpServlet {
 		String imagePath = request.getParameter("imagePath");
 		
 		//????  make sure user n context is asking for listing
-		if(itemService.validate("${pageContext.request.userPrincipal.name}", id)) {
+		//if(itemService.validate("${pageContext.request.userPrincipal.name}", id)) {
 			// list the files in the folder "image/imagePath"  O
-		}
+		//}
 		
 		// find if user is owner of the Album/imagePath
 		//Get page Content list as a JSON List
@@ -62,7 +62,7 @@ public class AlbumImagesResource extends HttpServlet {
 		//1. read the files in the image folder
 		
 		ItemInfo[] ItemInfos = new ItemInfo[1];
-		ItemInfos[0] = item;
+		//ItemInfos[0] = item;
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
 	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());

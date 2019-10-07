@@ -9,14 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 
 import com.inrik.domain.ItemInfo;
 import com.inrik.service.ItemService;
@@ -35,12 +30,11 @@ public class ItemCollectionResource extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException{
-		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		itemService = (ItemService) context.getBean("itemService");
 		ItemInfo[] itemInfos = new ItemInfo[1];
 		if(itemService != null) {
-			List<ItemInfo> items = itemService.getItems("${pageContext.request.userPrincipal.name}");
+			List<ItemInfo> items = itemService.getItems(request.getUserPrincipal().getName());
 			itemInfos = items.toArray(new ItemInfo[items.size()]);
 		}
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
