@@ -275,7 +275,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
       <font class='blue12' >My File Archive  </font>
     </td>
  </table>
- 
+
   <div id="myAlbumLinks"></div>
 </div></td></table>
 
@@ -440,7 +440,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		shareItem = "<td "+ onclieckShareAlbumStr +"><img src='resources/images/share2.png' class='myAlbum'  title='Share Album' > </td></table>";
 		showItem = "<td colspan='3'  align='center'"+ onclieckShowAlbumStr +
 		"><img src='resources/images/show.png' width='120' data-toggle='modal' data-target='#albumModal'  title='Show Album' > </td><tr>";
-	    nameItem = "<td align='center'> <font class='blue12'>"+ decodeURI(name) +"</font></td><tr>";
+	    nameItem = "<td align='center'> <font color='black'>"+ decodeURI(name) +"</font></td><tr>";
 	    
 		hideImageDropBox();
 		document.getElementById("uploadImageProgress").style.display='none';
@@ -448,8 +448,9 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		$("#myAlbumLinks").append ("<td align='center'><table align='center' width='200px'>"+ nameItem+showItem + 
 				deleteItem + editItem + shareItem +
 				"<table><td>"+  album     +"</td></table></td>");
-}  
-
+	}  
+	
+ 
 
   function saveAlbum(){
 	tmpFolder = $('#tmpSubFolderName').val();
@@ -468,13 +469,14 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		  data: { "albumname": encodeURIComponent(albumname), "publicAlbum": encodeURIComponent(publicAlbum), "details": encodeURIComponent(details),
 				"selectedTemplate": encodeURIComponent(selectedTempId), "userName": username, "tmpFolder": encodeURIComponent(tmpFolder)
 				},
-			success: function(data) {
+		  success: function(data) {
 			  name = data[0].name;
 			  itemInfoId = data[0].itemInfoId;
 			  description = data[0].description;
 			  imagePath=data[0].imagePath;
 			  selectedTemplate = data[0].selectedTemplate;
-			   createAlbum(itemInfoId, imagePath, selectedTemplate);
+			  //createAlbumRow(itemInfoId, imagePath, selectedTemplate);
+			  showMyAlbums();
 		   },
 		  dataType: "json"
 	   });	
@@ -492,7 +494,8 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		  success: function(data) {
 		     if(data !== undefined){
 		    	 document.getElementById("numberOfMyPhotoAlbums").innerHTML=data.length + " Photo Albums";
-		    	 $("#myAlbumLinks").append("<table align='center' width=700px>");
+		    	 $("#myAlbumLinks").empty();
+		    	 $("#myAlbumLinks").append("<table align='center' width='700px'>");
 		    	 for(i=0; data.length > i;i++){
 			   		name = data[i].name;
 			   		itemInfoId = data[i].itemInfoId;
@@ -500,16 +503,14 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 			   		imagePath=data[i].imagePath;
 			   		selectedTemplate = data[i].selectedTemplate;
 			   		$("#myAlbumLinks").append("<td  style='align:center'>");
-			   				
-			   		if(i % 4 == 0){
-			   			$("#myAlbumLinks").append("<tr>");
-			   		}
 			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);
-			   		
-			   			$("#myAlbumLinks").append("</td>");
-			   		
+			   		 if( (i+1) % 4 == 0){
+			   				$("#myAlbumLinks").append("</td><tr>");
+			   				}else{
+			   				$("#myAlbumLinks").append("</td>");
+			   			}
+		    	 }
 			    }
-		   }
 		  },
 		  error: function(xhr, status, error){
 		         var errorMessage = xhr.status + ': ' + xhr.statusText
