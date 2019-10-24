@@ -12,5 +12,5 @@ public interface ItemService
  
    public ItemInfo getItem(String string, String itemId); 
   
-   public void delete(int itemId);
+   public void deleteItem(String itemId);
 }

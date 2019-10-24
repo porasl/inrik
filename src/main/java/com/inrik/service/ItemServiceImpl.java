@@ -27,10 +27,9 @@ public class ItemServiceImpl implements ItemService
 		return itemDao.getItem(userId, itemId);
 	}
 
-
 	@Override
-	public void delete(int itemId) {
-		itemDao.delete(itemId);
+	public void deleteItem(String itemInfoId) {
+		itemDao.deleteItem(itemInfoId);
 	}
 
 	public void setItemDao(ItemDao itemDao){

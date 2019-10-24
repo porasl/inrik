@@ -11,5 +11,5 @@ public interface ItemDao
 	public List<ItemInfo> getItems(String userId);
 	public ItemInfo getItem(String userId, String itemId);
 	public void setItem(ItemInfo itemInfo);
-	public void delete(int itemId);
+	public void deleteItem(String itemInfoId);
 }

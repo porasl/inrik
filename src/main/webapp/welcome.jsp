@@ -39,7 +39,7 @@
    
 <script type="text/javascript">
 	window.google_analytics_uacct = "UA-15926901-3";
-
+	var imageMainName = "";
 function showAlbumSubMenu(){
 	document.getElementById("albumsubMenu").style.display='block';
 }
@@ -340,8 +340,8 @@ function noop(event) {
 
 function dropUpload(event) {
     noop(event);
-    var files = event.dataTransfer.files;
-
+    var files = event.dataTransfer.files;debugger;
+    imageMainName = files[0];
     for (var i = 0; i < files.length; i++) {
         upload(files[i]);
     }
@@ -380,7 +380,7 @@ function dropUpload(event) {
 		event.preventDefault();
 });
   
-function upload(file) {
+function upload(file) {debugger;
   //  document.getElementById("status").innerHTML = "Uploading " + file.name;
     var formData = new FormData();
     formData.append("_csrf","${_csrf.token}");
@@ -388,6 +388,7 @@ function upload(file) {
     if($('#tmpSubFolderName').val() !=""){
     	formData.append("tmpSubFolderName",$('#tmpSubFolderName').val());
     }
+    imageMainName = file.name;
     var xhr = new XMLHttpRequest();
     xhr.withCredentials=false;
     xhr.upload.addEventListener("progress", uploadProgress, false);
@@ -451,7 +452,6 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 	}  
 	
  
-
   function saveAlbum(){
 	tmpFolder = $('#tmpSubFolderName').val();
 	username = "${pageContext.request.userPrincipal.name}";
@@ -466,8 +466,8 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		    },
 		  url: serverUrl + "${contextPath}/item?${_csrf.parameterName}=${_csrf.token}",
 		 
-		  data: { "albumname": encodeURIComponent(albumname), "publicAlbum": encodeURIComponent(publicAlbum), "details": encodeURIComponent(details),
-				"selectedTemplate": encodeURIComponent(selectedTempId), "userName": username, "tmpFolder": encodeURIComponent(tmpFolder)
+		  data: { "action":"save", "albumname": encodeURIComponent(albumname), "publicAlbum": encodeURIComponent(publicAlbum), "details": encodeURIComponent(details),
+				"selectedTemplate": encodeURIComponent(selectedTempId), "userName": username, "tmpFolder": encodeURIComponent(tmpFolder),"thumbnail": encodeURIComponent(imageMainName)
 				},
 		  success: function(data) {
 			  name = data[0].name;
@@ -475,13 +475,14 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 			  description = data[0].description;
 			  imagePath=data[0].imagePath;
 			  selectedTemplate = data[0].selectedTemplate;
-			  //createAlbumRow(itemInfoId, imagePath, selectedTemplate);
 			  showMyAlbums();
 		   },
 		  dataType: "json"
 	   });	
 	}
 	
+  
+  
   function showMyAlbums(){
 	$.ajax({
 		  type: "GET",
@@ -570,7 +571,22 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 	
 	
 	function deleteAlbum(itemInfoId){
-		
+		alert("delete is invoked for Album: "+ itemInfoId);
+		var request =	$.ajax({
+			  type: "POST",
+			  headers: { 
+			        'Accept': 'application/json',
+			        'Content-Type': 'application/json' 
+			    },
+			    data: { "action":"delete", "id": itemInfoId},
+			  url: serverUrl + "${contextPath}/item?${_csrf.parameterName}=${_csrf.token}",
+			  success: function(data) {
+			     alert("Record is deleted");
+				  showMyAlbums();
+			   },
+			  dataType: "json"
+		   });	
+		 showMyAlbums();
 	}
 
 	function reset(){

@@ -44,8 +44,8 @@ public class ItemInfoDaoHibernateImpl extends HibernateDaoSupport implements Ite
 	
 
 	@Override
-	public void delete(int itemId) {
-		ItemInfo myItem = (ItemInfo) getHibernateTemplate().load(ItemInfo.class, itemId);
+	public void deleteItem(String itemId) {
+		ItemInfo myItem = (ItemInfo) getHibernateTemplate().load(ItemInfo.class,  Long.parseLong(itemId));
 		 getHibernateTemplate().delete(myItem);
 	}
 

@@ -11,18 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.inrik.domain.ItemInfo;
 import com.inrik.auth.model.User;
+import com.inrik.domain.ItemInfo;
 import com.inrik.service.ItemService;
 import com.inrik.service.UserService;
 import com.inrik.utils.Converter;
@@ -46,13 +42,14 @@ public class ItemResource extends HttpServlet {
 	// This can be used to test the integration with the browser
     @Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		//logger.info(" Get item id {0} ", re);
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		itemService = (ItemService) context.getBean("itemService");
 		String id = request.getParameter("id");
+		logger.info(" Delete item id {0} ", id);
 		ItemInfo item = itemService.getItem("${pageContext.request.userPrincipal.name}", id);
 		ItemInfo[] ItemInfos = new ItemInfo[1];
 		ItemInfos[0] = item;
+		itemService.getItem("${pageContext.request.userPrincipal.name}", id);
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
 	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
@@ -65,51 +62,76 @@ public class ItemResource extends HttpServlet {
    	    //logger.info(" POST create album {0} ", album);
     	String body = request.getReader().lines()
     		    .reduce("", (accumulator, actual) -> accumulator + actual);
-    	
+    	ItemInfo[]  itemInfos = new ItemInfo[1];
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		itemService = (ItemService) context.getBean("itemService");
 		String[] params = body.split("&");
-		ItemInfo itemInfo = new ItemInfo();
-		itemInfo.setAccesstype(Boolean.valueOf(getParamValue(params[1])));
-		try{
-			itemInfo.setName(URLDecoder.decode(getParamValue(params[0]), "UTF-8"));
-			itemInfo.setDescription(URLDecoder.decode(getParamValue(params[2]), "UTF-8"));
-		}catch(UnsupportedEncodingException e){
-			e.printStackTrace();
+		
+		if(URLDecoder.decode(getParamValue(params[0]), "UTF-8").equals("save")) {
+			ItemInfo itemInfo = new ItemInfo();
+			itemInfo.setAccesstype(Boolean.valueOf(getParamValue(params[2])));
+			try{
+				itemInfo.setName(URLDecoder.decode(getParamValue(params[1]), "UTF-8"));
+				itemInfo.setDescription(URLDecoder.decode(getParamValue(params[3]), "UTF-8"));
+			}catch(UnsupportedEncodingException e){
+				e.printStackTrace();
+			}
+			itemInfo.setSelectedtemplate(getParamValue(params[4]));
+			itemInfo.setImagepath(getParamValue(params[6]));
+			itemInfo.setImagemainname(getParamValue(params[7]));
+			itemInfo.setCreationdate(new Date());
+			itemInfo.setNotified(false);
+			itemInfo.setState(State.PENDING);
+			itemInfo.setDeletecode(0);
+			itemInfo.setLocale("en");
+			itemInfo.setType("ALBUM");
+			itemInfo.setFormat("ALBUM");
+			itemInfo.setVersion(VERSION);
+		
+			//String username = "${pageContext.request.userPrincipal.name}";
+			userService = (UserService) context.getBean("userService");
+			//Check Publisher if not redirect to login page
+			User user = userService.getUserInfo(getParamValue(params[5]));
+		
+			itemInfo.setUserid(user.getId());
+		
+			ItemInfo newAlbumInfo = itemService.createOrUpdate(itemInfo);
+			itemInfos[0] = newAlbumInfo;
+		
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+			response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");    
+			//response.getWriter().write(newAlbumInfo.tmpSubFolderName+"/"+filename);
+			//response.status(200).entity(itemInfoConverter.itemToString(itemInfos).toJSONString()).build();
+			response.getWriter().append(Converter.itemToString(itemInfos).toJSONString());
 		}
-		itemInfo.setSelectedtemplate(getParamValue(params[3]));
-		itemInfo.setImagepath(getParamValue(params[5]));
-		itemInfo.setCreationdate(new Date());
-		itemInfo.setNotified(false);
-		itemInfo.setState(State.PENDING);
-		itemInfo.setDeletecode(0);
-		itemInfo.setLocale("en");
-		itemInfo.setType("ALBUM");
-		itemInfo.setFormat("ALBUM");
-		itemInfo.setVersion(VERSION);
-		
-		
-		//String username = "${pageContext.request.userPrincipal.name}";
-		userService = (UserService) context.getBean("userService");
-		//Check Publisher if not redirect to login page
-		User user = userService.getUserInfo(getParamValue(params[4]));
-		
-		itemInfo.setUserid(user.getId());
-		ItemInfo newAlbumInfo = itemService.createOrUpdate(itemInfo);
-		ItemInfo[]  itemInfos = new ItemInfo[1];
-		itemInfos[0] = newAlbumInfo;
-		
-		response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");    
-        //response.getWriter().write(newAlbumInfo.tmpSubFolderName+"/"+filename);
-		//response.status(200).entity(Converter.itemToString(itemInfos).toJSONString()).build();
-        response.getWriter().append(Converter.itemToString(itemInfos).toJSONString());
-	
+		if(URLDecoder.decode(getParamValue(params[0]), "UTF-8").equals("delete")) {
+			itemService.deleteItem(getParamValue(params[1]));
+		}
     }
 	
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+   		
+    	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		itemService = (ItemService) context.getBean("itemService");
+		String id = request.getParameter("id");
+		logger.info(" Delete item id {0} ", id);
+		ItemInfo item = itemService.getItem("${pageContext.request.userPrincipal.name}", id);
+		ItemInfo[] ItemInfos = new ItemInfo[1];
+		ItemInfos[0] = item;
+		itemService.deleteItem(id);
+		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
+	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "*");
+	
+    }
+    
+    
 	public String getParamValue(String paramStr){
 		if(paramStr!=null){
 			return paramStr.substring(paramStr.indexOf("=")+1, paramStr.length());
