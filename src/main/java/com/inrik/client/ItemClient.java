@@ -28,7 +28,7 @@ public class ItemClient {
 	private PublisherClient publisherClient;
 	private StatusClient statusClient;
 	private String selectedTemplate;
-	private String mainImageName;
+	private String thumbnail;
 	private Long publisherId;
 	private String type;
 	
@@ -159,11 +159,11 @@ public class ItemClient {
 	public void setSelectedTemplate(String selectedTemplate) {
 		this.selectedTemplate = selectedTemplate;
 	}
-	public String getMainImageName() {
-		return mainImageName;
+	public String getThumbnail() {
+		return thumbnail;
 	}
-	public void setMainImageName(String mainImageName) {
-		this.mainImageName = mainImageName;
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 	
 	public Long getPublisherId() {

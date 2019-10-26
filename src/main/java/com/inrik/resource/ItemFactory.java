@@ -20,7 +20,7 @@ public class ItemFactory {
 	item.setFormat(obj.getString("format"));
 	item.setAudiopath(obj.getString("audioPath"));
 	item.setImagepath(obj.getString("imagePath"));
-	item.setImagemainname(obj.getString("mainImageName"));
+	item.setThumbnail(obj.getString("thumbnail"));
 	item.setVideopath(obj.getString("videoPath"));
 	item.setPrice(obj.getString("price"));
 	item.setPaidamount(obj.getString("paidAmount"));

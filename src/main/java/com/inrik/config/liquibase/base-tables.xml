@@ -48,7 +48,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liqui
             <column name="imagePath" type="varchar(200)">
                 <constraints nullable="true"/>
             </column> 
-             <column name="imageMainName" type="varchar(100)">
+             <column name="thumbnail" type="varchar(100)">
                 <constraints nullable="true"/>
              </column>
              <column name="videoMainName" type="varchar(100)">

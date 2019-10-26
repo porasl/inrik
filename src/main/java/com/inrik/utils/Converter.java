@@ -31,7 +31,7 @@ import com.inrik.domain.ItemInfo;
 			obj.put("imagePath",itemInfo.getImagepath());
 			obj.put("videoPath",itemInfo.getVideopath());
 			obj.put("audioMainName",itemInfo.getAudiomainname());
-			obj.put("imageMainName",itemInfo.getImagemainname());
+			obj.put("thumbnail",itemInfo.getThumbnail());
 			obj.put("videoMainName",itemInfo.getVideomainname());	
 			obj.put("price",itemInfo.getPrice());
 			obj.put("paidAmount",itemInfo.getPaidamount());

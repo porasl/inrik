@@ -66,7 +66,7 @@ public class ItemInfo {
 	private String audiomainname;
 	
 	@Column(nullable=true)
-	private String imagemainname;
+	private String thumbnail;
 	
 	@Column(nullable=true)
 	private String videomainname;
@@ -173,12 +173,12 @@ public class ItemInfo {
 			 this.selectedtemplate = selectedtemplate;
 		}
 	
-	public String getImagemainname(){
-		  return imagemainname;
+	public String getThumbnail(){
+		  return thumbnail;
 	}
 		
-	public void setImagemainname(String imagemainname){
-			 this.imagemainname = imagemainname;
+	public void setThumbnail(String thumbnail){
+			 this.thumbnail = thumbnail;
 		}
 	
 

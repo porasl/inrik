@@ -8,7 +8,7 @@ public class ItemConverter {
 		ItemClient itemClient = new ItemClient();
 		
 		itemClient.setSelectedTemplate(item.getSelectedtemplate());
-		itemClient.setMainImageName(item.getImagemainname());
+		itemClient.setThumbnail(item.getThumbnail());
 		item.setImagepath(item.getImagepath());
 		itemClient.setPrice(item.getPrice());
 		itemClient.setType(item.getType());

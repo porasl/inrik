@@ -39,7 +39,7 @@
    
 <script type="text/javascript">
 	window.google_analytics_uacct = "UA-15926901-3";
-	var imageMainName = "";
+	var mainImage = "";
 function showAlbumSubMenu(){
 	document.getElementById("albumsubMenu").style.display='block';
 }
@@ -341,7 +341,7 @@ function noop(event) {
 function dropUpload(event) {
     noop(event);
     var files = event.dataTransfer.files;debugger;
-    imageMainName = files[0];
+    mainImage = files[0];
     for (var i = 0; i < files.length; i++) {
         upload(files[i]);
     }
@@ -380,7 +380,7 @@ function dropUpload(event) {
 		event.preventDefault();
 });
   
-function upload(file) {debugger;
+function upload(file) {
   //  document.getElementById("status").innerHTML = "Uploading " + file.name;
     var formData = new FormData();
     formData.append("_csrf","${_csrf.token}");
@@ -388,7 +388,7 @@ function upload(file) {debugger;
     if($('#tmpSubFolderName').val() !=""){
     	formData.append("tmpSubFolderName",$('#tmpSubFolderName').val());
     }
-    imageMainName = file.name;
+    mainImage = file.name;
     var xhr = new XMLHttpRequest();
     xhr.withCredentials=false;
     xhr.upload.addEventListener("progress", uploadProgress, false);
@@ -422,7 +422,7 @@ function uploadComplete(event) {
     }));
 }
 	
-function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
+function createAlbumRow(itemInfoId, imagePath, selectedTemplate,thumbnail){
 		var albumUrl ="album.jsp?itemInfoId="+itemInfoId +"?${_csrf.parameterName}=${_csrf.token}";
 	    album ="<div style='display:none' id='"+itemInfoId  +"' class='content-one'>"+
 	    "<img src='resources/images/fb.png' width='30'> &nbsp;" +
@@ -440,7 +440,7 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		editItem = "<td "+ onclieckEditAlbumStr +" ><img src='resources/images/edit.png' class='myAlbum'  title='Edit Album'></td>";
 		shareItem = "<td "+ onclieckShareAlbumStr +"><img src='resources/images/share2.png' class='myAlbum'  title='Share Album' > </td></table>";
 		showItem = "<td colspan='3'  align='center'"+ onclieckShowAlbumStr +
-		"><img src='resources/images/show.png' width='120' data-toggle='modal' data-target='#albumModal'  title='Show Album' > </td><tr>";
+		"><img src='"+ imagePath+ "/"+ thumbnail+"' width='120' data-toggle='modal' data-target='#albumModal'  title='Show Album' > </td><tr>";
 	    nameItem = "<td align='center'> <font color='black'>"+ decodeURI(name) +"</font></td><tr>";
 	    
 		hideImageDropBox();
@@ -467,13 +467,14 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 		  url: serverUrl + "${contextPath}/item?${_csrf.parameterName}=${_csrf.token}",
 		 
 		  data: { "action":"save", "albumname": encodeURIComponent(albumname), "publicAlbum": encodeURIComponent(publicAlbum), "details": encodeURIComponent(details),
-				"selectedTemplate": encodeURIComponent(selectedTempId), "userName": username, "tmpFolder": encodeURIComponent(tmpFolder),"thumbnail": encodeURIComponent(imageMainName)
+				"selectedTemplate": encodeURIComponent(selectedTempId), "userName": username, "tmpFolder": encodeURIComponent(tmpFolder),"thumbnail": encodeURIComponent(mainImage)
 				},
 		  success: function(data) {
 			  name = data[0].name;
 			  itemInfoId = data[0].itemInfoId;
 			  description = data[0].description;
-			  imagePath=data[0].imagePath;
+			  imagePath = data[0].imagePath;
+			  thumbnail = data[0].thumbnail;
 			  selectedTemplate = data[0].selectedTemplate;
 			  showMyAlbums();
 		   },
@@ -501,10 +502,12 @@ function createAlbumRow(itemInfoId, imagePath, selectedTemplate){
 			   		name = data[i].name;
 			   		itemInfoId = data[i].itemInfoId;
 			   		description = data[i].description;
-			   		imagePath=data[i].imagePath;
+			   		imagePath=data[i].imagePath;debugger;
+			   		thumbnail = data[i].thumbnail;
 			   		selectedTemplate = data[i].selectedTemplate;
+			   		
 			   		$("#myAlbumLinks").append("<td  style='align:center'>");
-			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate);
+			   		createAlbumRow(itemInfoId, imagePath, selectedTemplate, thumbnail);
 			   		 if( (i+1) % 4 == 0){
 			   				$("#myAlbumLinks").append("</td><tr>");
 			   				}else{

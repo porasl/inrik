@@ -78,7 +78,7 @@ public class ItemResource extends HttpServlet {
 			}
 			itemInfo.setSelectedtemplate(getParamValue(params[4]));
 			itemInfo.setImagepath(getParamValue(params[6]));
-			itemInfo.setImagemainname(getParamValue(params[7]));
+			itemInfo.setThumbnail(getParamValue(params[7]));
 			itemInfo.setCreationdate(new Date());
 			itemInfo.setNotified(false);
 			itemInfo.setState(State.PENDING);
