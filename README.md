@@ -1,2 +1,4 @@
 # inrik a publisher application
-A base platform for content publishing, with user management etc. (Under development). Spring Boot, Hibernate 5, Liquibase 3.6, JS/Bootstrap, Ajax and jQuery
+A Web base platform for content publishing, with user management. Supporting chat, publishing possibilities for books, painting, Video, Audio, file and content format conversion and content sharing ... Under development ...
+ 
+Spring Boot, Hibernate 5, Liquibase, JS/Bootstrap, Ajax and jQuery
