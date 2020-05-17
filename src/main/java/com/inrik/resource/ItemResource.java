@@ -1,5 +1,6 @@
 package com.inrik.resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.inrik.auth.model.User;
 import com.inrik.domain.ItemInfo;
+import com.inrik.helper.RandomGenerator;
 import com.inrik.service.ItemService;
 import com.inrik.service.UserService;
 import com.inrik.utils.Converter;
+import com.inrik.utils.PropertiesUtil;
 import com.inrik.utils.State;
 
 
@@ -47,12 +53,22 @@ public class ItemResource extends HttpServlet {
 		String id = request.getParameter("id");
 		logger.info(" Delete item id {0} ", id);
 		ItemInfo item = itemService.getItem("${pageContext.request.userPrincipal.name}", id);
-		ItemInfo[] ItemInfos = new ItemInfo[1];
-		ItemInfos[0] = item;
+		ItemInfo[] itemInfos = new ItemInfo[1];
+		
+		//Get a list of images
+		String imagedir = PropertiesUtil.getImageTempdir() + "/"+item.getImagepath();
+		String[]imageNames = new File(imagedir).list();
+		String images="";
+		for(String contentName:imageNames) {
+			images += contentName+ ";";
+			
+		}
+		
+		itemInfos[0] = item;
 		itemService.getItem("${pageContext.request.userPrincipal.name}", id);
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
+	    response.getWriter().write(Converter.itemToString(itemInfos, images).toJSONString());
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "*");
 	}
@@ -60,8 +76,7 @@ public class ItemResource extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
    	    //logger.info(" POST create album {0} ", album);
-    	String body = request.getReader().lines()
-    		    .reduce("", (accumulator, actual) -> accumulator + actual);
+    	String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
     	ItemInfo[]  itemInfos = new ItemInfo[1];
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		itemService = (ItemService) context.getBean("itemService");
@@ -97,7 +112,7 @@ public class ItemResource extends HttpServlet {
 		
 			ItemInfo newAlbumInfo = itemService.createOrUpdate(itemInfo);
 			itemInfos[0] = newAlbumInfo;
-		
+		    
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
 			response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
@@ -105,16 +120,33 @@ public class ItemResource extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");    
 			//response.getWriter().write(newAlbumInfo.tmpSubFolderName+"/"+filename);
 			//response.status(200).entity(itemInfoConverter.itemToString(itemInfos).toJSONString()).build();
-			response.getWriter().append(Converter.itemToString(itemInfos).toJSONString());
-		}
-		if(URLDecoder.decode(getParamValue(params[0]), "UTF-8").equals("delete")) {
+			response.getWriter().append(Converter.itemToString(itemInfos, "").toJSONString());
+		}else
+			if(URLDecoder.decode(getParamValue(params[0]), "UTF-8").equals("delete")) {
 			itemService.deleteItem(getParamValue(params[1]));
+		}else 
+			if(URLDecoder.decode(getParamValue(params[0]), "UTF-8").equals("createAlbum")) {
+				RandomGenerator randomGenerator = new RandomGenerator();
+	    		response.setHeader("Access-Control-Allow-Origin", "*");
+				response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+				response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS");
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");    
+				JSONObject data = new JSONObject();
+				JSONArray jsonArray = new JSONArray();
+				try {
+					data.put("albumName", randomGenerator.nextRandom());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonArray.add(data);
+				response.getWriter().write(jsonArray.toJSONString());
 		}
     }
 	
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-   		
     	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		itemService = (ItemService) context.getBean("itemService");
 		String id = request.getParameter("id");
@@ -125,10 +157,9 @@ public class ItemResource extends HttpServlet {
 		itemService.deleteItem(id);
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
+	    response.getWriter().write(Converter.itemToString(ItemInfos, "").toJSONString());
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "*");
-	
     }
     
     
@@ -136,7 +167,6 @@ public class ItemResource extends HttpServlet {
 		if(paramStr!=null){
 			return paramStr.substring(paramStr.indexOf("=")+1, paramStr.length());
 		}
-		
 		return "";
 	}
 	

@@ -25,38 +25,37 @@ import com.inrik.utils.PropertiesUtil;
 @MultipartConfig
 @WebServlet("/uploadServlet")
 public class UploadResource extends HttpServlet {
-	
+	String tmpSubFolderName = null;
 	RandomGenerator randomGenerator;
     String imageTempdir;
-    String tmpSubFolderName;
+    
     
     static Logger logger = Logger.getLogger(UploadResource.class.getName());
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	 FileHandler fh;  
-    	 try {   
-    	     	fh = new FileHandler(PropertiesUtil.getServerLogAddress());  
-    	        logger.addHandler(fh);
-    	        SimpleFormatter formatter = new SimpleFormatter();  
-    	        fh.setFormatter(formatter);   
-    	     } catch (SecurityException e) {  
-    	        e.printStackTrace();  
-    	    } 
     	
-			imageTempdir = PropertiesUtil.getImageTempdir();
-			logger.info("Image dir is set to: " + imageTempdir);
-				
-			
-    		
+    	FileHandler fh;  
+    	try {   
+    		fh = new FileHandler(PropertiesUtil.getServerLogAddress());  
+    		logger.addHandler(fh);
+    		SimpleFormatter formatter = new SimpleFormatter();  
+    		fh.setFormatter(formatter);   
+    	} catch (SecurityException e) {  
+    		e.printStackTrace();  
+    	} 
+
+    	imageTempdir = PropertiesUtil.getImageTempdir();
+    	logger.info("Image dir is set to: " + imageTempdir);
+
     	Part filePart = request.getPart("file");
-    	if(tmpSubFolderName == null){
-    		tmpSubFolderName = request.getParameter("tmpSubFolderName");
-    		if((tmpSubFolderName == null) || tmpSubFolderName.equals("undefined")){
-    			randomGenerator = new RandomGenerator();
-    			tmpSubFolderName = randomGenerator.nextRandom();
-    		}
+    	
+    	tmpSubFolderName = request.getParameter("tmpSubFolderName");
+    	if((tmpSubFolderName == null) || tmpSubFolderName.equals("undefined")){
+    		randomGenerator = new RandomGenerator();
+    		tmpSubFolderName = randomGenerator.nextRandom();
     	}
+    	
         String filename = getFilename(filePart);
         InputStream filecontent = filePart.getInputStream(); 
         Path imagePath = Paths.get(imageTempdir+ "/"+ tmpSubFolderName);

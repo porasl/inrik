@@ -65,7 +65,7 @@ public class AlbumImagesResource extends HttpServlet {
 		//ItemInfos[0] = item;
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(Converter.itemToString(ItemInfos).toJSONString());
+	    response.getWriter().write(Converter.itemToString(ItemInfos, "").toJSONString());
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "*");
 	}
@@ -116,7 +116,7 @@ public class AlbumImagesResource extends HttpServlet {
         response.setCharacterEncoding("UTF-8");    
         //response.getWriter().write(newAlbumInfo.tmpSubFolderName+"/"+filename);
 		//response.status(200).entity(Converter.itemToString(itemInfos).toJSONString()).build();
-        response.getWriter().append(Converter.itemToString(itemInfos).toJSONString());
+        response.getWriter().append(Converter.itemToString(itemInfos, "").toJSONString());
 	
     }
 	

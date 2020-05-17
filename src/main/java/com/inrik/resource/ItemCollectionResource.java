@@ -39,7 +39,7 @@ public class ItemCollectionResource extends HttpServlet {
 		}
 		response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
 	    response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-	    response.getWriter().write(Converter.itemToString(itemInfos).toJSONString()); 
+	    response.getWriter().write(Converter.itemToString(itemInfos, "").toJSONString()); 
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "*");
 	}
