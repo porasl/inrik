@@ -1,5 +1,6 @@
 package com.inrik.domain;
 
+import java.beans.Transient;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -320,4 +321,5 @@ public class ItemInfo {
 	public void setAudiomainname(String audiomainname) {
 		this.audiomainname = audiomainname;
 	}
+	
 }
