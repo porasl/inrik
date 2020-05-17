@@ -1831,7 +1831,7 @@ pre code {
 
 @media (min-width: 768px) {
     .container {
-        width: 750px
+        width: 550px
     }
 }
 
@@ -6301,7 +6301,8 @@ button.close {
     border-radius: 6px;
     outline: 0;
     -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, .5)
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    width: 800px
 }
 
 .modal-backdrop {
@@ -6327,11 +6328,11 @@ button.close {
 .modal-header {
     min-height: 16.43px;
     padding: 15px;
-    border-bottom: 1px solid #e5e5e5
+    border-bottom: 1px solid #007bff
 }
 
 .modal-header .close {
-    margin-top: -2px
+    margin-top: -25px
 }
 
 .modal-title {
