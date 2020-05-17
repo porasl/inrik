@@ -9,17 +9,37 @@
   <head>
       <meta charset="utf-8">
       <title>Log in with your account</title>
-
-      <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-      <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+	      <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+      	<link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+      	<link href="${contextPath}/resources/css/style.css" rel="stylesheet"> 
   </head>
 
-  <body>
-
+  <body  background-color="white">
+   <table align='center' bprder="1">
+   <td  valign='top' align='center' class='leftDivFirstPage'>
+   <div class="rcorners" valign='middle'>
+     	 INRIK 
+     	</div>
+     	<div align="left">
+     	adadasds
+     	dsadsad
+     	dsada dfds fasfdsaf sdfdsa fsafsa fsaf
+     	fdsafdasf d
+     	fdsafdsafdsafsdafsdaf fdsafdsafdsa
+     	fasfdsafds<p>ewrewqrweqrwqrweq
+     	rewqrewqrqw
+     	rewqrewq
+     	rweqrweqrwq
+     	rewqrqwer
+     	rewqrwqrwq<p>
+     	rwerwrwqrwqrewqre
+     	rweqrwqrwrwqrerwq
+     	rwqrreqwr
+     	</div>
+   </td>
+   <td valign='top'>
     <div class="container">
       <form method="POST" action="${contextPath}/login" class="form-signin">
-        <h2 class="form-heading">Log in</h2>
-
         <div class="form-group ${error != null ? 'has-error' : ''}">
             <span>${message}</span>
             <input name="username" type="text" class="form-control" placeholder="Username"
@@ -33,7 +53,10 @@
         </div>
       </form>
     </div>
-
+      </td>
+      
+      
+      </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
   </body>
