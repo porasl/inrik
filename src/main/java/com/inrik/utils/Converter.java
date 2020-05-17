@@ -1,5 +1,7 @@
 package com.inrik.utils;
 
+import java.beans.Transient;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.json.simple.JSONArray;
@@ -8,7 +10,7 @@ import com.inrik.domain.ItemInfo;
 
  public class  Converter {
 
-	public static JSONArray itemToString(ItemInfo[] itemInfos){
+	public static JSONArray itemToString(ItemInfo[] itemInfos, String contentNames){
 		
 		JSONArray jsonArray = new JSONArray();
 	  for(int i=0;i<itemInfos.length;i++){
@@ -41,6 +43,7 @@ import com.inrik.domain.ItemInfo;
 			obj.put("expirationDate",itemInfo.getExpirationdate());
 			obj.put("deletionDate",itemInfo.getDeletiondate());
 			obj.put("userId",itemInfo.getUserid());
+			obj.put("contentNames", contentNames);
 			jsonArray.add(obj);
 		
 		} catch (JSONException e) {
